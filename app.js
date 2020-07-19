@@ -22,6 +22,7 @@ const tours = JSON.parse(
 );
 
 // route handler
+// Get all tours
 app.get('/api/v2/tours', (req,res) => {
   res.status(200).json({
     status: 'success',
@@ -31,7 +32,7 @@ app.get('/api/v2/tours', (req,res) => {
     }
   })
 })
-
+// create a new tour
 app.post('/api/v2/tours', (req, res) => {
   //console.log(req.body);
   const newId = tours[tours.length - 1].id + 1;
@@ -45,5 +46,25 @@ app.post('/api/v2/tours', (req, res) => {
       }
     })
   });
+})
+
+// Get specific tour, using URL parameter
+app.get('/api/v2/tours/:id', (req,res) => {
+  console.log(req.params);
+  const id = req.params.id * 1; // convert id from string to number
+  if (id > tours.length || !tours) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID'
+    })
+  }
+  const tour = tours.find(element => element.id === id);
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      tour: tour
+    }
+  })
 })
 

@@ -3,6 +3,18 @@ const tours = JSON.parse(
   fs.readFileSync('./../dev-data/data/tours-simple.json')
 );
 
+exports.checkID = (req, res, next, val) => {
+  console.log(`Tour id is: ${val}`);
+  const id = req.params.id * 1; // convert id from string to number
+  if (id >= tours.length) {
+    return res.status(404).json({
+      status: 'fail',
+      message: 'Invalid ID'
+    })
+  }
+  next();
+}
+
 // route handlers
 exports.getAllTours = (req,res) => {
   console.log(req.requestTime);
@@ -17,14 +29,7 @@ exports.getAllTours = (req,res) => {
 }
 
 exports.getTour = (req,res) => {
-  console.log(req.params);
   const id = req.params.id * 1; // convert id from string to number
-  if (id > tours.length || !tours) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    })
-  }
   const tour = tours.find(element => element.id === id);
   res.status(200).json({
     status: 'success',
@@ -52,13 +57,6 @@ exports.createTour = (req, res) => {
 
 exports.deleteTour = (req, res) => {
   const id = req.params.id * 1; // convert id from string to number
-  if (id > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid ID'
-    })
-  }
-
   const delete_index = tours.findIndex(element => element.id === id);
   delete tours[delete_index];
   res.status(204).json({

@@ -28,7 +28,17 @@ const tourSchema = new mongoose.Schema({
   }
 });
 const Tour = mongoose.model('Tour', tourSchema);
-
+//create documents
+const testTour = new Tour({
+  name: "The Park Camper",
+  price: 997
+});
+// save testTour document to database
+testTour.save().then(doc => {
+  console.log(doc);
+}).catch(err => {
+  console.log('ERROR: ', err);
+})
 // start the server
 const port = 3000;
 app.listen(port, () => {
